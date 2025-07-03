@@ -33,15 +33,18 @@ This project implements a deep learning pipeline for automatic segmentation of w
 
 - **Source:** [Sugar Beets 2016 (SB16)](https://www.ipb.uni-bonn.de/data/sugarbeets2016/)
 - **Structure:**
-data/
-├── rgb/
-├── nir/
-└── annotations/
-Each folder contains `.png` files; all images are resized to 1312×1312 pixels.
+    ```
+    data/
+      ├── rgb/
+      ├── nir/
+      └── annotations/
+    ```
+    Each folder contains `.png` files; all images are resized to **1312×1312** pixels.
+
 - **Classes:**  
-- `0`: Background (black in mask)
-- `1`: Sugarbeet (blue in mask)
-- `2`: Weed (red in mask)
+    - `0`: Background (black in mask)  
+    - `1`: Sugarbeet (blue in mask)  
+    - `2`: Weed (red in mask)  
 
 *Dataset is not included in this repo. Please download and prepare as described above.*
 
@@ -61,33 +64,33 @@ Each folder contains `.png` files; all images are resized to 1312×1312 pixels.
 ## How to Run
 
 1. **Install dependencies:**
-  ```bash
-  pip install -r requirements.txt
-  ```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 2. **Prepare dataset:**  
- Download the Sugar Beets 2016 dataset and organize as shown above.
+   Download the Sugar Beets 2016 dataset and organize as shown above.
 
 3. **Train the model:**
-  ```bash
-  python train.py
-  ```
-  - Saves best model as `output/best_model.pth`
-  - Plots training/validation loss convergence (`output/convergence_graph.png`)
+    ```bash
+    python train.py
+    ```
+    - Saves best model as `output/best_model.pth`
+    - Plots training/validation loss convergence (`output/convergence_graph.png`)
 
 4. **Run inference and visualize predictions:**
-  ```bash
-  python inference_visualize.py
-  ```
-  - Generates predicted masks and comparison images in `output/`
-  - Plots and saves per-class IoU and Dice graphs
+    ```bash
+    python inference_visualize.py
+    ```
+    - Generates predicted masks and comparison images in `output/`
+    - Plots and saves per-class IoU and Dice graphs
 
 5. **Evaluate advanced metrics:**
-  ```bash
-  python evaluate_metrics.py
-  ```
-  - Calculates Cohen’s kappa, per-class precision/recall
-  - Saves results to `output/evaluation_metrics.txt`
+    ```bash
+    python evaluate_metrics.py
+    ```
+    - Calculates Cohen’s kappa, per-class precision/recall
+    - Saves results to `output/evaluation_metrics.txt`
 
 ---
 
@@ -119,4 +122,3 @@ weed-detection-segmentation/
 ├── requirements.txt # Python dependencies
 ├── README.md # This file
 └── .gitignore # To ignore data/output/checkpoints (edit as needed)
-
