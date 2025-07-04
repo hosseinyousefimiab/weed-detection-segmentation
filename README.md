@@ -150,8 +150,7 @@ Sample predictions (Input | Ground Truth | Predicted):
 
 ### Additional Outputs
 
-- `data.txt` — (add a description if necessary)
-- `beet_weed_predict.err` / `beet_weed_train.out` — logs from training/inference (optional)
+- `beet_weed_predict.err` / `beet_weed_train.out` — logs from training/inference
 
 ---
 
