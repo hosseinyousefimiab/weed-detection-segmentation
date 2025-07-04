@@ -110,6 +110,10 @@ This project implements a deep learning pipeline for automatic segmentation of w
   <img src="./Results/iou_scores.png" alt="IoU Scores" width="48%"/>
   <img src="./Results/dice_coefficients.png" alt="Dice Coefficients" width="48%"/>
 </p>
+<p align="center">
+  <img src="./Results/ave_IoU.png" alt="IoU Scores" width="48%"/>
+  <img src="./Results/ave_Dice.png" alt="Dice Coefficients" width="48%"/>
+</p>
 
 ---
 
