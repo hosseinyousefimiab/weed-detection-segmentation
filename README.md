@@ -104,9 +104,28 @@ This project implements a deep learning pipeline for automatic segmentation of w
 
 - **Cohen’s κ coefficient:** 0.8959
 
-**Convergence graphs and example predictions** are saved in the `output/` directory after running the scripts.
+### Quantitative Results
 
----
+- **IoU scores:**  
+  ![IoU Scores](./Results/iou_scores.png)
+- **Dice coefficients:**  
+  ![Dice Coefficients](./Results/dice_coefficients.png)
+
+### Qualitative Results
+
+Sample predictions (Input | Ground Truth | Predicted):
+| Example 1 | Example 2 | Example 3 |
+|-----------|-----------|-----------|
+| ![P1](./Results/prediction_1.png) | ![P2](./Results/prediction_2.png) | ![P3](./Results/prediction_3.png) |
+
+<!-- Add more columns or rows as needed -->
+
+### Additional Outputs
+
+- `data.txt` — (description if needed)
+- `beet_weed_predict.err` / `beet_weed_train.out` — logs from training/inference (optional)
+
+
 
 ## Project Structure
 
