@@ -93,7 +93,6 @@ This project implements a deep learning pipeline for automatic segmentation of w
     - Saves results to `output/evaluation_metrics.txt`
 
 ---
-
 ## Results
 
 | Class       | IoU (%) | Dice (%) | Precision (%) | Recall (%) |
@@ -104,6 +103,8 @@ This project implements a deep learning pipeline for automatic segmentation of w
 
 - **Cohen’s κ coefficient:** 0.8959
 
+---
+
 ### Quantitative Results
 
 - **IoU scores:**  
@@ -111,16 +112,47 @@ This project implements a deep learning pipeline for automatic segmentation of w
 - **Dice coefficients:**  
   ![Dice Coefficients](./Results/dice_coefficients.png)
 
+---
+
 ### Qualitative Results
 
 Sample predictions (Input | Ground Truth | Predicted):
+
 | Example 1 | Example 2 | Example 3 |
 |-----------|-----------|-----------|
 | ![P1](./Results/prediction_1.png) | ![P2](./Results/prediction_2.png) | ![P3](./Results/prediction_3.png) |
 
-<!-- Add more columns or rows as needed -->
+<!-- Add more examples if you like: just copy-paste more columns! -->
+
+---
+
+### Study Comparison
+
+#### **Performance Across Studies**
+
+| Study                       | Architecture         | Dataset            | IoU/Accuracy (%) | Key Features/Limitations                          |
+|-----------------------------|----------------------|--------------------|------------------|---------------------------------------------------|
+| **This Study**              | ResNet-34 + U-Net    | SB16 (RGB + NIR)   | IoU: **93.5**    | Efficient 4-channel pixel-wise segmentation        |
+| Zou et al. (2021) [9]       | Modified U-Net       | Field Dataset      | IoU: 92.91       | Robust data augmentation, simplified U-Net         |
+| You et al. (2020) [11]      | ResNet-50 + HDC      | Stuttgart, Bonn    | IoU: 89.01       | Attention, multi-scale features                    |
+| Bosilj et al. (2019) [3]    | SegNet (Transfer L.) | Carrot, Onion      | IoU: 85          | Transfer learning, 80% less training time          |
+
+#### **Architectural Comparison**
+
+| Study                   | Encoder Backbone      | Key Enhancements                      | Computational Efficiency      |
+|-------------------------|----------------------|---------------------------------------|------------------------------|
+| **This Study**          | ResNet-34            | Pretrained, skip connections          | Moderate (4-channel input)   |
+| Zou et al. (2021) [9]   | Simplified U-Net     | Augmentation, two-stage training      | High                         |
+| You et al. (2020) [11]  | ResNet-50            | Attention, HDC, SPRB                  | Low (more components)        |
+| Bosilj et al. (2019) [3]| SegNet               | Transfer learning                     | High                         |
+
+---
 
 ### Additional Outputs
 
-- `beet_weed_predict.err` / `beet_weed_train.out` — logs from training/inference
+- `data.txt` — (add a description if necessary)
+- `beet_weed_predict.err` / `beet_weed_train.out` — logs from training/inference (optional)
 
+---
+
+**These results demonstrate that the ResNet-34 + U-Net model provides state-of-the-art performance for weed detection in precision agriculture, especially in terms of overall segmentation accuracy and real-time applicability.**
