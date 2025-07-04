@@ -7,16 +7,13 @@ from sklearn.metrics import cohen_kappa_score, precision_score, recall_score
 from albumentations import Compose, Normalize
 import segmentation_models_pytorch as smp
 
-# Constants
 RESIZE_HEIGHT = 1312
 RESIZE_WIDTH = 1312
 
-# Directories
 root_dir = "/cta/users/hossein.yousefimiab/suger/data/"
 output_dir = "/cta/users/hossein.yousefimiab/suger/output/"
 os.makedirs(output_dir, exist_ok=True)
 
-# Helper function to determine corresponding file names
 def get_corresponding_files(rgb_file):
     numeric_id = rgb_file.split("_")[1].split(".")[0]
     nir_file = rgb_file.replace("rgb", "nir")
@@ -24,7 +21,6 @@ def get_corresponding_files(rgb_file):
     annotation_file = f"{annotation_id}.png"
     return nir_file, annotation_file
 
-# Helper function to convert color mask to class IDs
 def color_mask_to_class_mask(mask_img):
     class_mask = np.zeros((mask_img.shape[0], mask_img.shape[1]), dtype=np.uint8)
     background = (mask_img[:, :, 0] == 0) & (mask_img[:, :, 1] == 0) & (mask_img[:, :, 2] == 0)
@@ -35,7 +31,6 @@ def color_mask_to_class_mask(mask_img):
     class_mask[weed] = 2
     return class_mask
 
-# Dataset Class
 class BeetWeedDataset(Dataset):
     def __init__(self, root_dir, image_names, transform=None):
         self.root_dir = root_dir
@@ -78,18 +73,15 @@ class BeetWeedDataset(Dataset):
         ann = torch.from_numpy(ann).long()
         return input_img, ann
 
-# Load dataset filenames
 all_rgb_files = sorted(os.listdir(os.path.join(root_dir, "rgb")))
 train_size = int(0.7 * len(all_rgb_files))
 val_size = int(0.15 * len(all_rgb_files))
 test_filenames = all_rgb_files[train_size + val_size:]
 
-# Dataset transform
 test_transform = Compose([Normalize(mean=(0.485, 0.456, 0.406, 0.5), std=(0.229, 0.224, 0.225, 0.2))])
 test_dataset = BeetWeedDataset(root_dir, test_filenames, transform=test_transform)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=4)
 
-# Load model
 model_path = os.path.join(output_dir, "best_model.pth")
 model = smp.Unet(encoder_name="resnet34", encoder_weights=None, in_channels=4, classes=3)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -97,12 +89,10 @@ model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
 model.eval()
 
-# Variables to store predictions and labels
 all_preds = []
 all_labels = []
 
-# Evaluate on test data
-valid_classes = [0, 1, 2]  # Background, Sugarbeet, Weed
+valid_classes = [0, 1, 2]  
 with torch.no_grad():
     for images, masks in test_loader:
         images = images.to(device)
@@ -113,21 +103,17 @@ with torch.no_grad():
         all_preds.extend(preds[mask])
         all_labels.extend(masks[mask])
 
-# Convert to numpy arrays
 all_preds = np.array(all_preds)
 all_labels = np.array(all_labels)
 
-# Calculate Cohen's kappa, precision, and recall
 kappa = cohen_kappa_score(all_labels, all_preds)
 precision = precision_score(all_labels, all_preds, average=None, labels=valid_classes)
 recall = recall_score(all_labels, all_preds, average=None, labels=valid_classes)
 
-# Print results
 print(f"Cohen's ? Coefficient: {kappa:.4f}")
 print(f"Precision (per class): {precision}")
 print(f"Recall (per class): {recall}")
 
-# Save results
 results_path = os.path.join(output_dir, "evaluation_metrics.txt")
 with open(results_path, "w") as f:
     f.write(f"Cohen's ? Coefficient: {kappa:.4f}\n")
