@@ -122,22 +122,5 @@ Sample predictions (Input | Ground Truth | Predicted):
 
 ### Additional Outputs
 
-- `data.txt` — (description if needed)
 - `beet_weed_predict.err` / `beet_weed_train.out` — logs from training/inference (optional)
 
-
-
-## Project Structure
-
-weed-detection-segmentation/
-│
-├── data/ # Not included (see above)
-├── output/ # Results: best_model.pth, graphs, visualizations, metrics
-│
-├── train.py # Model training and convergence plotting
-├── inference_visualize.py # Run inference, save predictions, plot IoU/Dice
-├── evaluate_metrics.py # Calculate Cohen’s kappa, precision/recall
-│
-├── requirements.txt # Python dependencies
-├── README.md # This file
-└── .gitignore # To ignore data/output/checkpoints (edit as needed)
