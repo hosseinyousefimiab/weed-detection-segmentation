@@ -9,7 +9,6 @@ import random
 from albumentations import Compose, Normalize
 import matplotlib.pyplot as plt
 
-# Helper function to get corresponding files
 def get_corresponding_files(rgb_file):
     numeric_id = rgb_file.split("_")[1].split(".")[0]
     nir_file = rgb_file.replace("rgb", "nir")
@@ -17,7 +16,6 @@ def get_corresponding_files(rgb_file):
     annotation_file = f"{annotation_id}.png"
     return nir_file, annotation_file
 
-# Helper function to convert color mask to class IDs
 def color_mask_to_class_mask(mask_img):
     class_mask = np.zeros((mask_img.shape[0], mask_img.shape[1]), dtype=np.uint8)
     background = (mask_img[:, :, 0] == 0) & (mask_img[:, :, 1] == 0) & (mask_img[:, :, 2] == 0)
@@ -28,11 +26,9 @@ def color_mask_to_class_mask(mask_img):
     class_mask[weed] = 2
     return class_mask
 
-# Helper function to resize images to 1312x1312
 def pad_to_1312(img):
     return cv2.resize(img, (1312, 1312), interpolation=cv2.INTER_LINEAR)
 
-# Dataset class
 class BeetWeedDataset(Dataset):
     def __init__(self, root_dir, image_names, transform=None):
         self.root_dir = root_dir
@@ -73,14 +69,12 @@ class BeetWeedDataset(Dataset):
         ann = torch.from_numpy(ann).long()
         return input_img, ann
 
-# Directories for data and model
 root_dir = "/cta/users/hossein.yousefimiab/suger/data/"
 model_path = "/cta/users/hossein.yousefimiab/suger/output/best_model.pth"
-output_dir = "/cta/users/hossein.yousefimiab/suger/output/"  # Directory to save results
+output_dir = "/cta/users/hossein.yousefimiab/suger/output/"  
 
 os.makedirs(output_dir, exist_ok=True)
 
-# Dataset and DataLoader creation
 all_rgb_files = glob.glob(os.path.join(root_dir, "rgb", "*.png"))
 all_filenames = [os.path.basename(p) for p in all_rgb_files]
 random.shuffle(all_filenames)
@@ -90,14 +84,12 @@ val_transform = Compose([Normalize(mean=(0.485, 0.456, 0.406, 0.5), std=(0.229, 
 test_dataset = BeetWeedDataset(root_dir, test_filenames, transform=val_transform)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=0)
 
-# Load the trained model
 model = smp.Unet(encoder_name="resnet34", encoder_weights=None, in_channels=4, classes=3)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
 model.eval()
 
-# Save predictions
 def save_predictions(model, dataloader, output_dir, num_samples=10):
     model.eval()
     saved_samples = 0
@@ -138,7 +130,6 @@ def save_predictions(model, dataloader, output_dir, num_samples=10):
             if saved_samples >= num_samples:
                 break
 
-# IoU and Dice Coefficient calculation
 def calculate_iou(preds, masks, num_classes=3):
     iou_scores = []
     for cls in range(num_classes):
@@ -157,7 +148,6 @@ def dice_coefficient(pred, target, num_classes=3):
         dice_scores.append(dice)
     return dice_scores
 
-# Evaluate IoU and Dice
 iou_scores, dice_scores = [], []
 with torch.no_grad():
     for images, masks in test_loader:
@@ -171,7 +161,6 @@ with torch.no_grad():
 avg_iou = np.mean(iou_scores, axis=0)
 avg_dice = np.mean(dice_scores, axis=0)
 
-# Save evaluation graphs
 plt.figure(figsize=(10, 5))
 plt.bar(range(len(avg_iou)), avg_iou, tick_label=["Background", "Sugarbeet", "Weed"])
 plt.title("IoU Scores for Each Class")
@@ -190,7 +179,6 @@ dice_graph_path = os.path.join(output_dir, "dice_coefficients.png")
 plt.savefig(dice_graph_path)
 plt.close()
 
-# Run prediction saving
 save_predictions(model, test_loader, output_dir, num_samples=10)
 
 print(f"Predictions and evaluation graphs saved in {output_dir}")
