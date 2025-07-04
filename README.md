@@ -104,27 +104,32 @@ This project implements a deep learning pipeline for automatic segmentation of w
 - **Cohen’s κ coefficient:** 0.8959
 
 ---
-
 ### Quantitative Results
 
-- **IoU scores:**  
-  ![IoU Scores](./Results/iou_scores.png)
-- **Dice coefficients:**  
-  ![Dice Coefficients](./Results/dice_coefficients.png)
+<p align="center">
+  <img src="./Results/iou_scores.png" alt="IoU Scores" width="48%"/>
+  <img src="./Results/dice_coefficients.png" alt="Dice Coefficients" width="48%"/>
+</p>
 
 ---
 
 ### Qualitative Results
 
-Sample predictions (Input | Ground Truth | Predicted):
+**Sample Predictions (Input | Ground Truth | Predicted):**
 
-| Example 1 | Example 2 | Example 3 |
-|-----------|-----------|-----------|
-| ![P1](./Results/prediction_1.png) | ![P2](./Results/prediction_2.png) | ![P3](./Results/prediction_3.png) |
+**Example 1**  
+![P1](./Results/prediction_1.png)
 
-<!-- Add more examples if you like: just copy-paste more columns! -->
+**Example 2**  
+![P2](./Results/prediction_2.png)
+
+**Example 3**  
+![P3](./Results/prediction_3.png)
+
+<!-- Add more if you like, just copy-paste another block! -->
 
 ---
+
 
 ### Study Comparison
 
