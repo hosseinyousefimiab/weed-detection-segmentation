@@ -1,6 +1,7 @@
-# Early Detection of Weeds in Sugar Beet Fields Using Machine Learning
+# Semantic Segmentation of Sugarbeet and Weed Using Transfer Learning
 
-**Pixel-wise segmentation of RGB+NIR sugar beet field images using deep learning (U-Net + ResNet-34) for precision weed detection.**
+Pixel-wise segmentation of RGB+NIR field images using U-Net + ResNet-34 (transfer learning) for precision weed detection in sugar beet fields.
+
 
 ---
 
