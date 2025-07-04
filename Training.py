@@ -11,11 +11,9 @@ from albumentations import (
     Compose, HorizontalFlip, RandomBrightnessContrast, GaussianBlur, Normalize
 )
 
-# Constants for resizing
 RESIZE_HEIGHT = 1312
 RESIZE_WIDTH = 1312
 
-# Helper function to determine corresponding file names
 def get_corresponding_files(rgb_file):
     numeric_id = rgb_file.split("_")[1].split(".")[0]
     nir_file = rgb_file.replace("rgb", "nir")
@@ -23,7 +21,6 @@ def get_corresponding_files(rgb_file):
     annotation_file = f"{annotation_id}.png"
     return nir_file, annotation_file
 
-# Helper function to convert color mask to class IDs
 def color_mask_to_class_mask(mask_img):
     class_mask = np.zeros((mask_img.shape[0], mask_img.shape[1]), dtype=np.uint8)
     background = (mask_img[:, :, 0] == 0) & (mask_img[:, :, 1] == 0) & (mask_img[:, :, 2] == 0)
@@ -34,7 +31,6 @@ def color_mask_to_class_mask(mask_img):
     class_mask[weed] = 2
     return class_mask
 
-# Dataset Class
 class BeetWeedDataset(Dataset):
     def __init__(self, root_dir, image_names, transform=None):
         self.root_dir = root_dir
@@ -85,7 +81,6 @@ class BeetWeedDataset(Dataset):
 
         return input_img, ann
 
-# IoU and Dice coefficient calculation
 def calculate_metrics(pred, target, num_classes=3):
     iou_scores, dice_scores = [], []
     for cls in range(num_classes):
@@ -97,12 +92,10 @@ def calculate_metrics(pred, target, num_classes=3):
         dice_scores.append(dice)
     return iou_scores, dice_scores
 
-# Directories
 root_dir = "/cta/users/hossein.yousefimiab/suger/data/"
 output_dir = "/cta/users/hossein.yousefimiab/suger/output/"
 os.makedirs(output_dir, exist_ok=True)
 
-# Dataset and DataLoaders
 all_rgb_files = glob.glob(os.path.join(root_dir, "rgb", "*.png"))
 all_filenames = [os.path.basename(p) for p in all_rgb_files]
 random.shuffle(all_filenames)
@@ -128,16 +121,13 @@ val_dataset = BeetWeedDataset(root_dir, val_filenames, transform=val_transform)
 train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True, num_workers=4)
 val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False, num_workers=4)
 
-# Model
 model = smp.Unet(encoder_name="resnet34", encoder_weights="imagenet", in_channels=4, classes=3)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
-# Loss, optimizer
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
 
-# Training
 num_epochs = 20
 best_val_loss = float("inf")
 train_losses, val_losses = [], []
@@ -184,7 +174,6 @@ for epoch in range(num_epochs):
         torch.save(model.state_dict(), os.path.join(output_dir, "best_model.pth"))
         print("Best model saved.")
 
-# Plot Convergence
 plt.figure()
 plt.plot(range(1, num_epochs + 1), train_losses, label="Train Loss")
 plt.plot(range(1, num_epochs + 1), val_losses, label="Validation Loss")
